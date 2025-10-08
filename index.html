@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Eunoia </title>
+    <link href="eunoia.css" rel="stylesheet">
+    
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav id="navbar">
+        <div class="nav-container">
+            <div class="logo">Eunoia</div>
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#cta-section-container">Take a Test</a></li>
+                <li><a href="#section_4">FAQ</a></li>
+                <li><a href="#contact">Get Help</a></li>
+            </ul>
+            <div class="mobile-menu-toggle" id="mobileMenuToggle">
+                <div class="hamburger"></div>
+                <div class="hamburger"></div>
+                <div class="hamburger"></div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Mobile Menu -->
+    <div class="mobile-menu" id="mobileMenu">
+        <ul class="mobile-nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#cta-section-container">Take a Test</a></li>
+            <li><a href="#section_4">FAQ</a></li>
+            <li><a href="#contact">Get Help</a></li>
+        </ul>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="floating-shapes">
+            <div class="shape shape-1"></div>
+            <div class="shape shape-2"></div>
+            <div class="shape shape-3"></div>
+            <div class="shape shape-4"></div>
+            <div class="shape shape-5"></div>
+            <div class="shape shape-6"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-subtitle">Personality Insight</div>
+            <h1>Discover Your Identity, Define Your Future.</h1>
+            <p class="subtitle">Our advanced personality quiz uncovers your core traits to help you make confident career and life decisions.</p>
+            <a href="#cta-section-container" class="cta-button">Take a personality insight test</a>
+        </div>
+        <div class="scroll-indicator" onclick="document.getElementById('about').scrollIntoView()"></div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2 class="section-title fade-in">About Eunoia</h2>
+            <div class="about-content">
+                <div class="about-image slide-in-left"></div>
+                <div class="about-text slide-in-right">
+                    <h3>Passionate about helping you make the most of the inner you</h3>
+                    <p>Discover the Essence of You with Eounia
+                        What makes you, you? At Eounia, we’re here to help you uncover the beauty of your personality through fun, insightful, and science-inspired quizzes. Our name, inspired by the Greek concept of a "beautiful state of being," reflects our mission to guide you on a journey of self-discovery that’s as meaningful as it is enjoyable.
+                    <p><b>'Why Eounia?'</b>
+                        Eounia isn’t just another quiz app—it’s your personal guide to understanding yourself better. 
+                        Whether you’re curious about your strengths, seeking clarity for your career, or exploring how you connect with others, our carefully crafted personality tests deliver results that resonate. Here’s what sets us apart:</p>
+                    <div class="skills">
+                       <span class="skill-tag">personalized Insight</span>
+                        <span class="skill-tag">Engaging</span>
+                        <span class="skill-tag">Actionable </span>
+                        <span class="skill-tag">Safe and Secure</span>
+                     </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Section -->
+    <section id="portfolio" class="portfolio">
+        <div class="container">
+            <h2 class="section-title fade-in">Featured Work</h2>
+            <div class="portfolio-grid">
+                <div class="portfolio-item">
+                    <div class="portfolio-image"></div>
+                    <div class="portfolio-content">
+                        <h4>Our Mission</h4>
+                        <p>
+                            We believe self-discovery is the key to living a fulfilling life. Eounia exists to make that journey accessible, empowering you to embrace your unique qualities and navigate life with confidence. From students to professionals, dreamers to doers, Eounia is for anyone ready to explore who they are.
+                        </p>
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-image"></div>
+                    <div class="portfolio-content">
+                        <h4>Your Privacy, Our Promise</h4>
+                        <p>
+                          Your trust means everything to us. Eounia is built with your privacy in mind—we never share your data, and your results are yours to keep. Our tests are designed with care, drawing on established personality frameworks to ensure meaningful and reliable insights.
+                         </p>
+                       
+                    </div>
+                </div>
+                <div class="portfolio-item">
+                    <div class="portfolio-image"></div>
+                    <div class="portfolio-content">
+                        <h4>Who we are</h4>
+                        <p>
+                            Eounia was created by a team passionate about psychology, self-growth, and making a positive impact. We’re here to spark curiosity, inspire reflection, and celebrate what makes every individual unique.
+                        </p>
+              
+                    </div>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+    <!-- faqs -->
+    <section class="faq-section section-padding" id="section_4" >
+                <div class="container">
+                    <div class="row">
+
+                        <div class="col-lg-6 col-12">
+                            <h2 class="mb-4">Frequently Asked Questions</h2>
+                        </div>
+
+                        <div class="clearfix"></div>
+
+                        <div class="col-lg-5 col-12">
+                            <img src="images/faq_graphic.jpg" class="img-fluid" alt="FAQs">
+                        </div>
+
+                        <div class="col-lg-6 col-12 m-auto">
+                            <div class="accordion" id="accordionExample">
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingOne">
+                                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                         How accurate are Eounia’s personality tests?
+                                        </button>
+                                    </h2>
+
+                                    <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            Our tests are designed to provide meaningful insights based on established psychological frameworks, like the Big Five or MBTI-inspired models, and crafted with input from personality research. While no test can capture every nuance of who you are, Eounia’s quizzes aim to offer reliable, personalized results that spark self-reflection and growth. For the best experience, answer honestly and take multiple tests to explore different facets of your personality!
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingTwo">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                        Is my personal data safe with Eounia?
+                                    </button>
+                                    </h2>
+
+                                    <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            Absolutely, your privacy is our priority. Eounia never shares or sells your personal information, and your quiz results are kept confidential. We use secure, encrypted systems to protect your data, so you can focus on discovering yourself without worry. For more details, check out our  <a href="#privacy">Privacy Policy</a>.
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="accordion-item">
+                                    <h2 class="accordion-header" id="headingThree">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                        How can Eounia’s results help me in my daily life?
+                                    </button>
+                                    </h2>
+
+                                    <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
+                                        <div class="accordion-body">
+                                            Eounia’s personality tests give you actionable insights to better understand your strengths, preferences, and how you connect with others. Whether you’re navigating career choices, improving relationships, or simply exploring what makes you unique, our results provide practical tips and ideas to apply in real-world situations. Plus, our fun quizzes make self-discovery an engaging journey you can revisit anytime!
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </section>
+            <!-- testimonials -->
+            <section class="testimonials section-padding" id="testimonials">
+  <div class="container text-center">
+    <h2 class="section-title mb-4">What People Say About Us</h2>
+    <p class="section-subtitle mb-5">See how our personality insights helped users understand themselves better.</p>
+
+    <div class="testimonial-slider">
+      <div class="testimonial-card active">
+        <img src="images/user1.jpg" alt="User 1" class="testimonial-img">
+        <p class="testimonial-text">"This personality test completely changed how I see myself. The accuracy is unbelievable!"</p>
+        <h4 class="testimonial-name">Sarah Johnson</h4>
+        <span class="testimonial-role">Student, Psychology Major</span>
+      </div>
+
+      <div class="testimonial-card">
+        <img src="images/user2.jpg" alt="User 2" class="testimonial-img">
+        <p class="testimonial-text">"I never realized how my strengths aligned with my career goals until I took this test."</p>
+        <h4 class="testimonial-name">David O.</h4>
+        <span class="testimonial-role">Tech Enthusiast</span>
+      </div>
+
+      <div class="testimonial-card">
+        <img src="images/user3.jpg" alt="User 3" class="testimonial-img">
+        <p class="testimonial-text">"The insights were so deep yet easy to understand. It helped me make confident life choices."</p>
+        <h4 class="testimonial-name">Aisha Bello</h4>
+        <span class="testimonial-role">Entrepreneur</span>
+      </div>
+    </div>
+
+    <!-- Navigation dots -->
+    <div class="testimonial-dots">
+      <span class="dot active"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+    </div>
+  </div>
+</section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="contact-floating-shapes">
+            <div class="contact-shape contact-shape-1"></div>
+            <div class="contact-shape contact-shape-2"></div>
+            <div class="contact-shape contact-shape-3"></div>
+            <div class="contact-shape contact-shape-4"></div>
+            <div class="contact-shape contact-shape-5"></div>
+            <div class="contact-shape contact-shape-6"></div>
+        </div>
+        <div class="container">
+            <div class="contact-content">
+                <h2 class="section-title fade-in">Let's get to help you</h2>
+                <p class="fade-in">Get to know how to implement the Actionable steps you see here, we can gat you a mentor for free, are you Ready to bring your vision to life? send us a massage let's get to know you first and get a mentor for you.</p>
+                <form class="contact-form fade-in">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" placeholder="Your full name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" placeholder="your.email@example.com" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <input type="text" id="subject" name="subject" placeholder="What's this about?" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="message">Message</label>
+                        <textarea id="message" name="message" rows="6" placeholder="Tell me about your project..." required></textarea>
+                    </div>
+                    <button type="submit" class="submit-btn">Get help</button>
+                </form>
+            </div>
+        </div>
+    </section>
+    <!-- cta bottun -->
+
+    <div id="cta-section-container"></div>
+<script>
+  fetch("cta-section.html")
+    .then(res => res.text())
+    .then(html => document.getElementById("cta-section-container").innerHTML = html);
+</script>
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-left">
+                    <p>&copy; 2025 Eounia. All rights reserved.</p>
+                </div>
+                <div class="footer-right">
+                    <a href="#privacy">Privacy Policy</a>
+                    <a href="#terms">Terms of Use</a>
+                    <a href="#sitemap">Sitemap</a>
+                </div>
+            </div>
+        </div>
+         <p style="text-align: center; color: black; font-size: 59; margin: 10px">&copy; OddSolutions made with 🤍 . All rights reserved.</p>
+         
+    </footer>
+
+
+<!-- Bootstrap JS (required for accordion functionality) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="eunoia.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Comprehensive Personality and Temperament Test</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4a69bd;
+            --secondary-color: #6a89cc;
+            --background-color: #f4f7fc;
+            --card-background: rgba(255, 255, 255, 0.7);
+            --text-color: #333;
+            --light-text-color: #555;
+            --white-color: #fff;
+            --border-radius: 15px;
+            --shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--background-color);
+            background-image:
+                radial-gradient(at 0% 0%, hsla(217, 65%, 85%, 1) 0px, transparent 50%),
+                radial-gradient(at 100% 0%, hsla(220, 65%, 80%, 1) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, hsla(215, 65%, 85%, 1) 0px, transparent 50%),
+                radial-gradient(at 0% 100%, hsla(218, 65%, 80%, 1) 0px, transparent 50%);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            margin: auto;
+            background: var(--card-background);
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        h1, h2 {
+            color: var(--primary-color);
+            text-align: center;
+        }
+        
+        p {
+            color: var(--light-text-color);
+            line-height: 1.6;
+            text-align: center;
+        }
+
+        /* --- Animations --- */
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideIn { from { opacity: 0; transform: translateX(-30px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+
+        /* --- Buttons --- */
+        .btn {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: var(--white-color); border: none; padding: 12px 25px; border-radius: 50px;
+            cursor: pointer; font-size: 16px; font-weight: 600; margin: 10px 5px;
+            transition: transform 0.2s, box-shadow 0.2s; display: inline-block;
+        }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 4px 15px rgba(0,0,0,0.2); }
+        .option-btn {
+            background: var(--white-color); color: var(--primary-color); border: 2px solid var(--secondary-color);
+            padding: 10px 20px; border-radius: 50px; cursor: pointer; transition: all 0.3s ease; font-weight: 600;
+        }
+        .option-btn:hover { background: var(--secondary-color); color: var(--white-color); transform: translateY(-2px); }
+        .option-btn.selected {
+            background: var(--primary-color); color: var(--white-color); border-color: var(--primary-color); animation: pulse 0.5s;
+        }
+
+        /* --- Quiz Structure --- */
+        #intro, #interests-form { text-align: center; }
+        .question-card { display: none; animation: slideIn 0.5s ease-out; }
+        .question-card.active { display: block; }
+        .question-card-content {
+            margin-bottom: 25px; padding: 30px; border-radius: var(--border-radius);
+            background: rgba(255, 255, 255, 0.9); box-shadow: 0 4px 15px rgba(0,0,0,0.05); text-align: center;
+        }
+        .question-text { font-size: 1.2rem; font-weight: 600; color: var(--text-color); margin-bottom: 20px; }
+        .options { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 15px; justify-content: center; }
+        .navigation-buttons, .action-buttons { display: flex; justify-content: center; flex-wrap: wrap; margin-top: 20px; }
+        .navigation-buttons .btn, .action-buttons .btn { margin: 5px 10px; }
+
+        /* --- Progress Bar --- */
+        .progress-bar-container { position: relative; width: 100%; margin-bottom: 30px; }
+        .progress-bar { width: 100%; background: #e9ecef; height: 10px; border-radius: 5px; overflow: hidden; }
+        .progress {
+            height: 100%; background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            width: 0; transition: width 0.4s ease-in-out;
+        }
+        #progress-text {
+            position: absolute; right: 0; top: -20px; font-size: 0.9em; font-weight: 600; color: var(--primary-color);
+        }
+
+        /* --- Styled Interest Form --- */
+        #interests-input, #interest-categories {
+            width: 90%; max-width: 500px; padding: 12px 20px;
+            border: 2px solid #ccc; border-radius: 50px; margin: 10px auto;
+            transition: all 0.3s; display: block; background: var(--white-color);
+            font-family: 'Poppins', sans-serif; font-size: 15px;
+        }
+        #interest-categories {
+            height: 120px; border-radius: var(--border-radius); padding: 15px;
+        }
+        #interest-categories option { padding: 5px; }
+        #interests-input:focus, #interest-categories:focus { 
+            outline: none; border-color: var(--primary-color); box-shadow: 0 0 10px rgba(74, 105, 189, 0.2);
+        }
+        
+        /* --- Results Page & Accordion --- */
+        #results { animation: fadeIn 1s; }
+        .result-section {
+            background: rgba(255,255,255,0.8); border-radius: var(--border-radius);
+            margin-bottom: 15px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); overflow: hidden;
+        }
+        .accordion-header {
+            width: 100%; background: none; border: none; text-align: left;
+            padding: 20px; font-size: 1.2rem; font-weight: 600; color: var(--primary-color);
+            cursor: pointer; display: flex; justify-content: space-between; align-items: center;
+        }
+        .accordion-header::after { content: '+'; font-size: 1.5rem; transition: transform 0.3s; }
+        .accordion-header.active::after { transform: rotate(45deg); }
+        .accordion-content {
+            padding: 0 20px; max-height: 0; overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+        }
+        .accordion-content p, .accordion-content ul { text-align: left; }
+        .accordion-content ul { list-style-position: outside; padding-left: 20px; }
+        .accordion-content li { margin-bottom: 10px; }
+        .accordion-content a { color: var(--primary-color); text-decoration: none; font-weight: 600; }
+        .accordion-content a:hover { text-decoration: underline; }
+        #traitChart { max-width: 450px; margin: 30px auto; }
+
+        @media (max-width: 600px) {
+            .container { padding: 20px; }
+            .options { flex-direction: column; }
+            .option-btn { width: 100%; box-sizing: border-box; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="intro">
+            <h1>EOUNIA Personality and Temperament Test</h1>
+            <p>Unlock deep insights into your personality and temperament. This quiz provides actionable advice for personal growth and career alignment. Share it with friends to discover how their unique traits can shape their lives!</p>
+            <button class="btn" onclick="startQuiz()">Start Test</button>
+        </div>
+
+        <div id="quiz" style="display: none;">
+            <div class="progress-bar-container">
+                <div id="progress-text">0% Complete</div>
+                <div class="progress-bar"><div class="progress" id="progress"></div></div>
+            </div>
+            
+            <div id="interests-form">
+                <h2>Your Interests</h2>
+                <p>Select categories and add specifics to tailor your results.</p>
+                <select multiple id="interest-categories">
+                   <option value="technology">Technology & Engineering</option>
+                   <option value="arts">Creative Arts & Design</option>
+                   <option value="sports">Sports & Fitness</option>
+                   <option value="business">Business & Entrepreneurship</option>
+                   <option value="science">Science & Research</option>
+                   <option value="social">Social Work & Community</option>
+                   <option value="agriculture">Agriculture & Environment</option>
+                </select>
+                <input type="text" id="interests-input" placeholder="e.g., coding, music, sustainable farming">
+                <button class="btn" onclick="saveInterests()">Save & Start Questions</button>
+            </div>
+            
+            <form id="quizForm" style="display: none;"></form>
+        </div>
+
+        <div id="results" style="display: none;">
+             <h1>Your Comprehensive Results</h1>
+            <div id="results-container">
+                </div>
+            <canvas id="traitChart"></canvas>
+            <div class="action-buttons">
+                <button class="btn" onclick="shareResults()">Share</button>
+                <button class="btn" onclick="window.location.href='./index.html'">Home</button>
+                <button class="btn" onclick="window.location.href='./index.html#contact'">Get help</button>
+                <button class="btn" onclick="downloadPdf()">Download PDF</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- State Variables ---
+        let chart;
+        let userInterests = '';
+        let answers = {};
+        let currentQuestion = 0;
+        let personalityScores = {};
+        let temperamentResult = '';
+        let resultData = {}; // Store all generated text for easy download
+        
+        const questions = [ { id: 'q1', text: 'I am the life of the party.' }, { id: 'q2', text: 'I keep in the background.' }, { id: 'q3', text: 'I talk to a lot of different people at parties.' }, { id: 'q4', text: 'I don\'t like to draw attention to myself.' }, { id: 'q5', text: 'I feel energized by social interactions.' }, { id: 'q6', text: 'I prefer spending time alone over socializing.' }, { id: 'q7', text: 'I sympathize with others\' feelings.' }, { id: 'q8', text: 'I am not interested in other people\'s problems.' }, { id: 'q9', text: 'I feel others\' emotions deeply.' }, { id: 'q10', text: 'I tend to be critical of others.' }, { id: 'q11', text: 'I enjoy helping others achieve their goals.' }, { id: 'q12', text: 'I prioritize my own needs over others.' }, { id: 'q13', text: 'I get chores done right away.' }, { id: 'q14', text: 'I often forget to put things back in their proper place.' }, { id: 'q15', text: 'I like to plan ahead in detail.' }, { id: 'q16', text: 'I leave tasks unfinished.' }, { id: 'q17', text: 'I pay attention to details.' }, { id: 'q18', text: 'I tend to be disorganized.' }, { id: 'q19', text: 'I have frequent mood swings.' }, { id: 'q20', text: 'I am relaxed most of the time.' }, { id: 'q21', text: 'I get upset easily.' }, { id: 'q22', text: 'I seldom feel blue.' }, { id: 'q23', text: 'I worry about things often.' }, { id: 'q24', text: 'I feel calm in stressful situations.' }, { id: 'q25', text: 'I have a vivid imagination.' }, { id: 'q26', text: 'I am not interested in abstract ideas.' }, { id: 'q27', text: 'I enjoy exploring new ideas and concepts.' }, { id: 'q28', text: 'I prefer familiar routines over new experiences.' }, { id: 'q29', text: 'I spend time reflecting on philosophical questions.' }, { id: 'q30', text: 'I find it hard to think creatively.' }, ];
+        const resourceDatabase = { temperaments: { Choleric: { videos: [ { title: "How to Be a Great Leader - Simon Sinek", url: "https://www.youtube.com/watch?v=lmyZMtPVodo" }, { title: "Managing Stress for Ambitious People", url: "https://www.youtube.com/watch?v=GrS_w9d6khc" } ], articles: [ { title: "The Choleric Temperament in the Workplace", url: "https://www.verywellmind.com/the-four-temperaments-of-personality-2795942" }, { title: "Turning Ambition into Success Without Burning Out", url: "https://www.forbes.com/sites/forbescoachescouncil/2021/05/25/14-ways-to-turn-ambition-into-success-without-burning-out/" } ], books: [ { title: "The 7 Habits of Highly Effective People by Stephen Covey", url: "#" } ] }, Sanguine: { videos: [ { title: "The Power of Enthusiasm", url: "https://www.youtube.com/watch?v=9g2i_f9b0vA" }, { title: "How to Improve Your Focus - The Pomodoro Technique", url: "https://www.youtube.com/watch?v=H0k0_bK01cI" } ], articles: [ { title: "Living with a Sanguine Personality", url: "https://www.psychologytoday.com/us/blog/the-secret-lives-introverts/201808/what-is-the-sanguine-personality-type" }, { title: "Networking Tips for Social Butterflies", url: "https://www.themuse.com/advice/an-introverts-guide-to-networking" } ], books: [ { title: "How to Win Friends and Influence People by Dale Carnegie", url: "#" } ] }, Melancholic: { videos: [ { title: "The Power of Introverts - Susan Cain", url: "https://www.youtube.com/watch?v=c0KYU2j0TM4" }, { title: "How to Overcome Perfectionism", url: "https://www.youtube.com/watch?v=8bcmGp-5kI4" } ], articles: [ { title: "Understanding the Melancholic Temperament", url: "https://www.learning-mind.com/melancholic-temperament-personality/" }, { title: "The Creative Gifts of Sensitive People", url: "https://www.creativitypost.com/psychology/the_creative_gifts_of_the_highly_sensitive_person" } ], books: [ { title: "Quiet: The Power of Introverts by Susan Cain", url: "#" } ] }, Phlegmatic: { videos: [ { title: "The Art of Being a Great Listener", url: "https://www.youtube.com/watch?v=saXfavo1OQo" }, { title: "Inside the mind of a master procrastinator - Tim Urban", url: "https://www.youtube.com/watch?v=arj7oStGLkU" } ], articles: [ { title: "The Phlegmatic Personality Type Explained", url: "https://www.psychologyjunkie.com/2017/06/01/understanding-phlegmatic-personality-type/" }, { title: "Finding Motivation When You're Easy-Going", url: "https://hbr.org/2018/06/how-to-motivate-yourself-when-you-dont-have-a-deadline" } ], books: [ { title: "The Power of Now by Eckhart Tolle", url: "#" } ] } }, traits: { Openness: { resources: [ { title: "A guide to boosting your creativity", url: "https://www.youtube.com/watch?v=QSkAgd_eS2I" }, { title: "Why you should embrace curiosity", url: "https://ideas.ted.com/want-to-be-more-creative-go-for-a-walk/" }] }, Conscientiousness: { resources: [ { title: "How to build self-discipline - The Willpower Instinct", url: "https://www.youtube.com/watch?v=V5BXuZL1HAg" }, { title: "The Science of Developing Willpower", url: "https://www.apa.org/topics/willpower" }] }, Extraversion: { resources: [ { title: "The surprising science of happiness - Dan Gilbert", url: "https://www.youtube.com/watch?v=4q1dgn_C0AU" }, { title: "How to be a better networker", url: "https://www.forbes.com/sites/ashiraprossack1/2018/08/21/how-to-network-effectively/" }] }, Agreeableness: { resources: [ { title: "The importance of empathy - Brené Brown", url: "https://www.youtube.com/watch?v=1Evwgu369Jw" }, { title: "How to Set Healthy Boundaries", url: "https://www.psychologytoday.com/us/blog/prescriptions-life/201803/how-set-healthy-boundaries" }] }, Neuroticism: { resources: [ { title: "How to make stress your friend - Kelly McGonigal", url: "https://www.youtube.com/watch?v=RcGyVTAoXEU" }, { title: "Techniques for Managing Anxiety", url: "https://www.verywellmind.com/ten-ways-to-relieve-anxiety-1393132" }] } } };
+        
+        window.onload = loadProgress;
+        function startQuiz() { document.getElementById('intro').style.display = 'none'; document.getElementById('quiz').style.display = 'block'; }
+        function saveInterests() { const textInterests = document.getElementById('interests-input').value.trim(); const categoryInterests = Array.from(document.getElementById('interest-categories').selectedOptions).map(option => option.text); const allInterests = [...categoryInterests, ...textInterests.split(',').map(s => s.trim()).filter(Boolean)]; userInterests = [...new Set(allInterests)].join(', '); if (!userInterests) { alert('Please tell us about your interests!'); return; } document.getElementById('interests-form').style.display = 'none'; document.getElementById('quizForm').style.display = 'block'; saveProgress(); renderQuestion(); }
+        function renderQuestion() { if (currentQuestion >= questions.length) return; const questionData = questions[currentQuestion]; const optionsHtml = ['Strongly Disagree', 'Disagree', 'Neutral', 'Agree', 'Strongly Agree'].map((label, i) => `<button type="button" class="option-btn" data-value="${i+1}" aria-label="${label} for question ${currentQuestion + 1}">${label}</button>`).join(''); document.getElementById('quizForm').innerHTML = `<div class="question-card active"><div class="question-card-content"><p class="question-text">${currentQuestion + 1}. ${questionData.text}</p><div class="options">${optionsHtml}</div></div><div class="navigation-buttons">${currentQuestion > 0 ? '<button type="button" class="btn" onclick="prevQuestion()">Previous</button>' : ''}${currentQuestion < questions.length - 1 ? '<button type="button" id="nextBtn" class="btn" style="display:none;" onclick="nextQuestion()">Next</button>' : ''}${currentQuestion === questions.length - 1 ? '<button type="button" id="submitBtn" class="btn" style="display:none;" onclick="submitQuiz()">Submit</button>' : ''}</div></div>`; addOptionListeners(); highlightSelectedAnswer(); }
+        function addOptionListeners() { document.querySelectorAll('.option-btn').forEach(button => { button.addEventListener('click', function() { answers[questions[currentQuestion].id] = parseInt(this.dataset.value); document.querySelectorAll('.option-btn').forEach(btn => btn.classList.remove('selected')); this.classList.add('selected'); const nextBtn = document.getElementById('nextBtn') || document.getElementById('submitBtn'); if (nextBtn) nextBtn.style.display = 'inline-block'; saveProgress(); updateProgress(); }); }); }
+        function highlightSelectedAnswer() { const questionId = questions[currentQuestion].id; if (answers[questionId]) { const selectedBtn = document.querySelector(`.option-btn[data-value="${answers[questionId]}"]`); if (selectedBtn) selectedBtn.classList.add('selected'); const nextBtn = document.getElementById('nextBtn') || document.getElementById('submitBtn'); if (nextBtn) nextBtn.style.display = 'inline-block'; } }
+        function nextQuestion() { if (currentQuestion < questions.length - 1) { currentQuestion++; renderQuestion(); } }
+        function prevQuestion() { if (currentQuestion > 0) { currentQuestion--; renderQuestion(); } }
+        function saveProgress() { localStorage.setItem('personalityTestProgress', JSON.stringify({ answers, userInterests, currentQuestion })); }
+        function loadProgress() { const saved = JSON.parse(localStorage.getItem('personalityTestProgress')); if (saved) { answers = saved.answers || {}; userInterests = saved.userInterests || ''; currentQuestion = saved.currentQuestion || 0; if (userInterests) { startQuiz(); document.getElementById('interests-form').style.display = 'none'; document.getElementById('quizForm').style.display = 'block'; renderQuestion(); } } updateProgress(); }
+        function updateProgress() { const answered = Object.keys(answers).length; const progressPercent = (answered / questions.length) * 100; document.getElementById('progress').style.width = `${progressPercent}%`; document.getElementById('progress-text').textContent = `${Math.round(progressPercent)}% Complete`; }
+        
+        // --- Main Submit & Calculation Logic ---
+        function submitQuiz() {
+            if (Object.keys(answers).length < questions.length) { alert('Please answer all questions.'); return; }
+            const E = (answers.q1 + (6 - answers.q2) + answers.q3 + (6 - answers.q4) + answers.q5 + (6 - answers.q6)) / 6;
+            const A = (answers.q7 + (6 - answers.q8) + answers.q9 + (6 - answers.q10) + answers.q11 + (6 - answers.q12)) / 6;
+            const C = (answers.q13 + (6 - answers.q14) + answers.q15 + (6 - answers.q16) + answers.q17 + (6 - answers.q18)) / 6;
+            const N = (answers.q19 + (6 - answers.q20) + answers.q21 + (6 - answers.q22) + answers.q23 + (6 - answers.q24)) / 6;
+            const O = (answers.q25 + (6 - answers.q26) + answers.q27 + (6 - answers.q28) + answers.q29 + (6 - answers.q30)) / 6;
+            personalityScores = { Openness: O, Conscientiousness: C, Extraversion: E, Agreeableness: A, Neuroticism: N };
+            
+            generateResultsHTML();
+            setupAccordion();
+            displayResultsChart();
+
+            document.getElementById('quiz').style.display = 'none';
+            document.getElementById('results').style.display = 'block';
+            localStorage.removeItem('personalityTestProgress');
+        }
+
+        function generateResultsHTML() {
+            const { Openness, Conscientiousness, Extraversion, Agreeableness, Neuroticism } = personalityScores;
+
+            // 1. Personality Traits
+            let typeDescHTML = `<p>Your Big Five Personality Traits (scored out of 5):<br>
+                <b>Openness: ${Openness.toFixed(1)}</b> - Reflects imagination, creativity, and openness to new experiences.<br>
+                <b>Conscientiousness: ${Conscientiousness.toFixed(1)}</b> - Indicates organization, reliability, and goal-oriented behavior.<br>
+                <b>Extraversion: ${Extraversion.toFixed(1)}</b> - Measures sociability, assertiveness, and energy from social interactions.<br>
+                <b>Agreeableness: ${Agreeableness.toFixed(1)}</b> - Shows compassion, cooperation, and empathy.<br>
+                <b>Neuroticism: ${Neuroticism.toFixed(1)}</b> - Gauges emotional stability and tendency toward negative emotions.</p>`;
+            resultData.personality = `Your Big Five Personality Traits (scored out of 5):\nOpenness: ${Openness.toFixed(1)}\nConscientiousness: ${Conscientiousness.toFixed(1)}\nExtraversion: ${Extraversion.toFixed(1)}\nAgreeableness: ${Agreeableness.toFixed(1)}\nNeuroticism: ${Neuroticism.toFixed(1)}`;
+            
+            // 2. Temperament (RESTORED FULL DETAILS)
+            let temp = '', tempDesc = '', tempPros = '', tempCons = '', tempLifeStrategy = '';
+            if (Extraversion >= 3.5 && Neuroticism >= 3.5) { temp = 'Choleric'; tempDesc = 'You are driven, ambitious, and a natural leader with a strong desire to achieve goals.'; tempPros = 'Your assertiveness and energy make you excel in leadership roles, inspire teams, and tackle challenges head-on.'; tempCons = 'Impatience, irritability, or dominance can strain relationships or lead to burnout.'; tempLifeStrategy = 'Leverage your drive by setting clear, ambitious goals and leading projects, but practice active listening and patience to build stronger relationships. To avoid setbacks, delegate tasks to prevent overworking and use stress-relief techniques like exercise to manage intensity.'; } 
+            else if (Extraversion >= 3.5 && Neuroticism < 3.5) { temp = 'Sanguine'; tempDesc = 'You are outgoing, charismatic, and thrive in social environments.'; tempPros = 'Your enthusiasm builds strong networks, fosters collaboration, and brings positivity to any setting.'; tempCons = 'Impulsivity or lack of focus can lead to unfinished tasks or scattered priorities.'; tempLifeStrategy = 'Use your social skills to network and inspire, but set clear schedules and reminders to stay on track. To avoid setbacks, break tasks into smaller steps and partner with detail-oriented colleagues to ensure completion.'; } 
+            else if (Extraversion < 3.5 && Neuroticism >= 3.5) { temp = 'Melancholic'; tempDesc = 'You are introspective, analytical, and deeply creative, with a focus on quality and meaning.'; tempPros = 'Your thoughtfulness leads to high-quality work, innovative solutions, and deep connections.'; tempCons = 'Perfectionism, overthinking, or moodiness can cause delays or self-doubt.'; tempLifeStrategy = 'Channel your creativity into meaningful projects and seek feedback to refine your work. To avoid setbacks, set realistic deadlines, practice self-compassion, and use journaling to manage emotions.'; } 
+            else { temp = 'Phlegmatic'; tempDesc = 'You are calm, diplomatic, and value harmony and stability.'; tempPros = 'Your calm demeanor fosters peace, makes you a great mediator, and helps you thrive in stable environments.'; tempCons = 'Passivity or procrastination can hinder progress in fast-paced or urgent situations.'; tempLifeStrategy = 'Use your diplomacy in teamwork and negotiations, but set clear priorities to stay proactive. To avoid setbacks, adopt time-management tools and seek motivation from collaborative projects.'; }
+            temperamentResult = temp;
+            let temperamentHTML = `<p>${tempDesc}</p><p><strong>Benefits:</strong> ${tempPros}</p><p><strong>Potential Setbacks:</strong> ${tempCons}</p><p><strong>Life Strategy:</strong> ${tempLifeStrategy}</p>`;
+            resultData.temperament = `Temperament: ${temp}\n\n${tempDesc}\n\nBenefits: ${tempPros}\n\nPotential Setbacks: ${tempCons}\n\nLife Strategy: ${tempLifeStrategy}`;
+            
+            // 3. Detailed Insights (RESTORED FULL DETAILS)
+            let insightsHTML = getTraitInsightHTML('Openness', Openness) + getTraitInsightHTML('Conscientiousness', Conscientiousness) + getTraitInsightHTML('Extraversion', Extraversion) + getTraitInsightHTML('Agreeableness', Agreeableness) + getTraitInsightHTML('Neuroticism', Neuroticism);
+            resultData.insights = `Openness: ${getTraitInsightText('Openness', Openness)}\n\nConscientiousness: ${getTraitInsightText('Conscientiousness', Conscientiousness)}\n\nExtraversion: ${getTraitInsightText('Extraversion', Extraversion)}\n\nAgreeableness: ${getTraitInsightText('Agreeableness', Agreeableness)}\n\nNeuroticism: ${getTraitInsightText('Neuroticism', Neuroticism)}`;
+
+            // 4. Action Plan
+            let { actionPlanTitle, actionPlanText } = generateActionPlan();
+            let actionPlanHTML = `<p>Your strongest trait is <b>${actionPlanTitle}</b>. Here's a daily habit to leverage it:</p><p><i>${actionPlanText}</i></p>`;
+            resultData.actionPlan = `Your strongest trait is ${actionPlanTitle}.\nDaily Habit: ${actionPlanText}`;
+            
+            // 5. Career Paths (RESTORED FULL DETAILS)
+            let careerHTML = `<p>Based on your personality, temperament, and interests (<b>${userInterests}</b>), here are tailored career recommendations:</p><ul>`;
+            if (Openness > 3.5 || temp === 'Melancholic') careerHTML += `<li><strong>Creative Innovator in ${userInterests || 'Your Field'}:</strong> Leverage your creativity to develop innovative solutions, such as designing products or content in ${userInterests || 'your area of interest'}. Your depth suits roles requiring originality and problem-solving.</li>`;
+            if (Conscientiousness > 3.5 || temp === 'Choleric') careerHTML += `<li><strong>Project Leader in ${userInterests || 'Your Field'}:</strong> Lead initiatives with your organizational skills, managing teams or projects in ${userInterests || 'your area of interest'} to drive impactful results.</li>`;
+            if (Extraversion > 3.5 || temp === 'Sanguine') careerHTML += `<li><strong>Community Specialist in ${userInterests || 'Your Field'}:</strong> Engage communities or clients in ${userInterests || 'your area of interest'}, using your charisma to promote ideas or products.</li>`;
+            if (Agreeableness > 3.5 || temp === 'Phlegmatic') careerHTML += `<li><strong>Collaborative Role in ${userInterests || 'Your Field'}:</strong> Work in teams to create solutions in ${userInterests || 'your area of interest'}, leveraging your diplomacy for harmonious outcomes.</li>`;
+            if (Neuroticism < 3.5) careerHTML += `<li><strong>High-Pressure Role in ${userInterests || 'Your Field'}:</strong> Manage critical tasks in ${userInterests || 'your area of interest'}, using your emotional stability to excel in demanding environments.</li>`;
+            careerHTML += '</ul>';
+            resultData.careers = careerHTML.replace(/<[^>]*>/g, '\n').replace(/\n\n+/g, '\n').trim(); // Basic conversion to text
+
+            // 6. Resources
+            let resourcesHTML = generateResources();
+            resultData.resources = resourcesHTML.replace(/<[^>]*>/g, '\n').replace(/\n\n+/g, '\n').trim();
+
+            const resultsContainer = document.getElementById('results-container');
+            resultsContainer.innerHTML = createAccordionSection('Personality Traits', typeDescHTML, true) + createAccordionSection(`Temperament: ${temp}`, temperamentHTML) + createAccordionSection('Detailed Life Insights', insightsHTML) + createAccordionSection('Strengths-Based Action Plan', actionPlanHTML) + createAccordionSection('Personalized Career Paths', careerHTML) + createAccordionSection('Further Learning & Resources', resourcesHTML);
+        }
+
+        // --- Helper functions for generating full result text ---
+        function getTraitInsightText(trait, score) {
+            const { pros, cons, lifeStrategy, career } = getTraitInsightContent(trait, score);
+            return `Benefits: ${pros}\nPotential Setbacks: ${cons}\nLife Strategy: ${lifeStrategy}\nCareer Suggestions: ${career}`;
+        }
+        function getTraitInsightHTML(trait, score) {
+            const { pros, cons, lifeStrategy, career } = getTraitInsightContent(trait, score);
+            return `<p><strong>${trait} (${score.toFixed(1)}):</strong><br><strong>Benefits:</strong> ${pros}<br><strong>Potential Setbacks:</strong> ${cons}<br><strong>Life Strategy:</strong> ${lifeStrategy}<br><strong>Career Suggestions:</strong> ${career}</p>`;
+        }
+        function getTraitInsightContent(trait, score) {
+            let pros = '', cons = '', lifeStrategy = '', career = '';
+            if (trait === 'Openness') { if (score > 3.5) { pros = 'High Openness fuels your creativity and adaptability, making you excel in innovative and dynamic environments.'; cons = 'You may struggle with focus or get overwhelmed by too many ideas, leading to indecision.'; lifeStrategy = `Embrace creative projects in ${userInterests || 'your areas of interest'}, but use prioritization tools to stay focused. To avoid setbacks, test ideas with small prototypes before committing fully.`; career = `Ideal roles: Creative or innovative positions in ${userInterests || 'your field'}, such as design, research, or product development.`; } else if (score < 2.5) { pros = 'Low Openness offers reliability and comfort with routine, ensuring steady progress in structured tasks.'; cons = 'Resistance to change may limit innovation or adaptation in fast-evolving fields.'; lifeStrategy = `Build routines that include gradual exploration in ${userInterests || 'your interests'}, like learning one new skill monthly. To avoid setbacks, collaborate with creative peers to spark inspiration without disrupting stability.`; career = `Consider stable roles in ${userInterests || 'your field'}, such as operations or quality assurance, where consistency is key.`; } else { pros = 'Balanced Openness allows flexibility without losing focus.'; cons = 'You may occasionally miss bold opportunities due to moderate risk-taking.'; lifeStrategy = `Explore new ideas in ${userInterests || 'your interests'} in controlled settings, like workshops, to balance stability and growth.`; career = `Try roles in ${userInterests || 'your field'} that blend creativity and structure, like technical support or content creation.`; } }
+            else if (trait === 'Conscientiousness') { if (score > 3.5) { pros = 'High Conscientiousness drives achievement, making you reliable in delivering high-quality work.'; cons = 'Perfectionism or rigidity can lead to burnout or inflexibility.'; lifeStrategy = `Use your discipline to lead projects in ${userInterests || 'your areas of interest'}, but schedule breaks and delegate tasks to maintain balance. To avoid setbacks, practice adaptability in dynamic settings.`; career = `Explore leadership or organized roles in ${userInterests || 'your field'}, such as project management or systems engineering.`; } else if (score < 2.5) { pros = 'Low Conscientiousness fosters spontaneity, allowing creative freedom.'; cons = 'Disorganization may lead to missed deadlines or incomplete projects.'; lifeStrategy = `Use apps like Trello to organize tasks in ${userInterests || 'your interests'} and pair with structured colleagues. To avoid setbacks, start with small, achievable goals to build momentum.`; career = `Consider creative roles in ${userInterests || 'your field'}, such as design or ideation-based work.`; } else { pros = 'Balanced planning and adaptability suit varied work environments.'; cons = 'Inconsistent discipline may slow progress in high-pressure roles.'; lifeStrategy = `Set daily priorities to maintain steady progress in ${userInterests || 'your interests'}.`; career = `Try roles in ${userInterests || 'your field'} that balance structure and creativity, like event planning or technical writing.`; } }
+            else if (trait === 'Extraversion') { if (score > 3.5) { pros = 'High Extraversion makes you a natural networker, thriving in collaborative environments.'; cons = 'Over-socializing can lead to burnout or neglecting solo tasks.'; lifeStrategy = `Leverage your energy in team settings or client-facing roles in ${userInterests || 'your interests'}, but carve out solo time to recharge. To avoid setbacks, balance networking with focused work.`; career = `Ideal roles: Collaborative positions in ${userInterests || 'your field'}, such as outreach or team leadership.`; } else if (score < 2.5) { pros = 'Low Extraversion (Introversion) supports deep focus, perfect for independent work.'; cons = 'Isolation may limit networking or team collaboration opportunities.'; lifeStrategy = `Schedule intentional social interactions, like meetups, to build connections in ${userInterests || 'your interests'}. To avoid setbacks, practice pitching ideas to gain visibility.`; career = `Consider focused roles in ${userInterests || 'your field'}, such as research or technical development.`; } else { pros = 'Ambiversion adapts to both solo and team settings.'; cons = 'Energy levels may fluctuate, affecting consistency.'; lifeStrategy = `Tune into daily energy for optimal task allocation in ${userInterests || 'your interests'}.`; career = `Try roles in ${userInterests || 'your field'} that balance solo and team tasks, like consulting or hybrid roles.`; } }
+            else if (trait === 'Agreeableness') { if (score > 3.5) { pros = 'High Agreeableness builds trust and teamwork, ideal for collaborative projects.'; cons = 'People-pleasing may lead to overcommitment or avoiding conflict.'; lifeStrategy = `Use empathy in team dynamics in ${userInterests || 'your interests'}, but set boundaries to protect your time. To avoid setbacks, practice assertive communication in negotiations.`; career = `Explore collaborative roles in ${userInterests || 'your field'}, such as community engagement or user-focused work.`; } else if (score < 2.5) { pros = 'Low Agreeableness drives independent decision-making and critical thinking.'; cons = 'May be perceived as abrasive, straining professional relationships.'; lifeStrategy = `Offer constructive feedback and soften communication to build rapport in ${userInterests || 'your interests'}. To avoid setbacks, seek allies who value your honesty.`; career = `Consider analytical roles in ${userInterests || 'your field'}, such as data analysis or strategic planning.`; } else { pros = 'Balanced cooperation and independence suit varied teams.'; cons = 'May struggle with decisive action in conflicts.'; lifeStrategy = `Practice active listening to strengthen collaboration in ${userInterests || 'your interests'}.`; career = `Try roles in ${userInterests || 'your field'} that balance teamwork and autonomy, like project coordination.`; } }
+            else if (trait === 'Neuroticism') { if (score > 3.5) { pros = 'High Neuroticism heightens risk awareness, useful for detailed planning.'; cons = 'Anxiety or overthinking can hinder decision-making or cause stress.'; lifeStrategy = `Use mindfulness, journaling, or exercise to manage stress in ${userInterests || 'your interests'}. To avoid setbacks, break tasks into smaller steps to reduce overwhelm.`; career = `Consider detail-oriented roles in ${userInterests || 'your field'}, such as quality assurance or risk analysis.`; } else if (score < 2.5) { pros = 'Low Neuroticism (Emotional Stability) enables calm under pressure, ideal for high-stakes roles.'; cons = 'May overlook emotional cues or risks, appearing detached.'; lifeStrategy = `Use your calm to lead in crises in ${userInterests || 'your interests'}, but stay open to others’ emotions. To avoid setbacks, double-check plans for risks.`; career = `Explore high-pressure roles in ${userInterests || 'your field'}, such as operations management or crisis response.`; } else { pros = 'Moderate emotional responses balance caution and calm.'; cons = 'Variable stress handling may affect consistency.'; lifeStrategy = `Build routines like meditation to stabilize emotions in ${userInterests || 'your interests'}.`; career = `Try steady roles in ${userInterests || 'your field'}, such as technical support or development.`; } }
+            return { pros, cons, lifeStrategy, career };
+        }
+
+        function createAccordionSection(title, content, isOpen = false) { return `<div class="result-section"><button class="accordion-header ${isOpen ? 'active' : ''}">${title}</button><div class="accordion-content" style="${isOpen ? 'max-height: 2000px; padding: 10px 20px 20px;' : ''}">${content}</div></div>`; }
+        function setupAccordion() { document.querySelectorAll('.accordion-header').forEach(button => { button.addEventListener('click', () => { button.classList.toggle('active'); const content = button.nextElementSibling; if (content.style.maxHeight) { content.style.maxHeight = null; content.style.padding = "0 20px"; } else { content.style.maxHeight = content.scrollHeight + "px"; content.style.padding = "10px 20px 20px"; } }); }); }
+        function generateActionPlan() { const topTraitName = Object.keys(personalityScores).reduce((a, b) => personalityScores[a] > personalityScores[b] ? a : b); let planText = ''; switch (topTraitName) { case 'Openness': planText = 'Dedicate 10 minutes each day to brainstorming or exploring a new topic related to your interests.'; break; case 'Conscientiousness': planText = 'Start each day by identifying your top three priorities. Ticking them off will provide a sense of accomplishment.'; break; case 'Extraversion': planText = 'Make it a point to have one meaningful conversation each day, whether with a friend or colleague.'; break; case 'Agreeableness': planText = 'Each day, perform one small act of kindness. It could be a word of encouragement or helping someone out.'; break; case 'Neuroticism': planText = 'Practice 5 minutes of mindfulness or journaling each day to process your feelings and build resilience.'; break; } return { actionPlanTitle: topTraitName, actionPlanText: planText }; }
+        function generateResources() { const tempResources = resourceDatabase.temperaments[temperamentResult]; const topTraitName = Object.keys(personalityScores).reduce((a, b) => personalityScores[a] > personalityScores[b] ? a : b); const traitResources = resourceDatabase.traits[topTraitName]; let html = `<p>Explore these resources tailored to your <b>${temperamentResult}</b> temperament and your high score in <b>${topTraitName}</b>.</p><h4>Recommended Videos:</h4><ul>`; tempResources.videos.forEach(v => { html += `<li><a href="${v.url}" target="_blank" rel="noopener noreferrer">${v.title}</a></li>`; }); traitResources.resources.filter(r => r.url.includes("youtube")).forEach(v => { html += `<li><a href="${v.url}" target="_blank" rel="noopener noreferrer">${v.title}</a></li>`; }); html += '</ul><h4>Suggested Articles:</h4><ul>'; tempResources.articles.forEach(a => { html += `<li><a href="${a.url}" target="_blank" rel="noopener noreferrer">${a.title}</a></li>`; }); traitResources.resources.filter(r => !r.url.includes("youtube")).forEach(a => { html += `<li><a href="${a.url}" target="_blank" rel="noopener noreferrer">${a.title}</a></li>`; }); html += '</ul><h4>Book Recommendations:</h4><ul>'; tempResources.books.forEach(b => { html += `<li>${b.title}</li>`; }); html += '</ul>'; return html; }
+        function displayResultsChart() { const scores = Object.values(personalityScores); const labels = Object.keys(personalityScores); const ctx = document.getElementById('traitChart').getContext('2d'); if(chart) chart.destroy(); chart = new Chart(ctx, { type: 'radar', data: { labels: labels, datasets: [{ label: 'Your Traits', data: scores, fill: true, backgroundColor: 'rgba(74, 105, 189, 0.2)', borderColor: 'rgb(74, 105, 189)', pointBackgroundColor: 'rgb(74, 105, 189)', pointBorderColor: '#fff', }] }, options: { scales: { r: { beginAtZero: true, min: 1, max: 5, ticks: { stepSize: 1 } } } } }); }
+        
+        // --- REBUILT: Share and Download Functions ---
+        function shareResults() {
+            const topTraitName = Object.keys(personalityScores).reduce((a, b) => personalityScores[a] > personalityScores[b] ? a : b);
+            const summary = `I'm a ${temperamentResult} with a high score in ${topTraitName}! Find out your personality type with this comprehensive test.`;
+            if (navigator.share) { navigator.share({ title: 'My Personality Test Results', text: summary, url: window.location.href }).catch(console.error); } 
+            else { alert('Sharing is not supported on this browser, but you can copy this text:\n\n' + summary); }
+        }
+
+        function downloadPdf() {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF({ orientation: 'p', unit: 'mm', format: 'a4' });
+            let y = 20;
+            const margin = 15;
+            const maxWidth = doc.internal.pageSize.getWidth() - (2 * margin);
+
+            const addSection = (title, content) => {
+                if (y > 250) { doc.addPage(); y = 20; }
+                doc.setFont('helvetica', 'bold');
+                doc.setFontSize(14);
+                doc.text(title, margin, y);
+                y += 8;
+                doc.setFont('helvetica', 'normal');
+                doc.setFontSize(10);
+                const splitText = doc.splitTextToSize(content.replace(/<br>/g, '\n'), maxWidth);
+                doc.text(splitText, margin, y);
+                y += (splitText.length * 4) + 10;
+            };
+
+            doc.setFont('helvetica', 'bold');
+            doc.setFontSize(18);
+            doc.text('Your Comprehensive Personality Results', doc.internal.pageSize.getWidth() / 2, y, { align: 'center' });
+            y += 15;
+
+            addSection('Your Interests', userInterests);
+            addSection('Personality Traits Summary', resultData.personality);
+            addSection('Temperament Analysis', resultData.temperament);
+            addSection('Detailed Life Insights', resultData.insights);
+            addSection('Action Plan', resultData.actionPlan);
+            addSection('Career Paths', resultData.careers);
+            addSection('Further Resources', resultData.resources);
+            
+            if (y > 180) { doc.addPage(); y = 20; }
+            const imgData = document.getElementById('traitChart').toDataURL('image/png');
+            doc.addImage(imgData, 'PNG', margin, y, 100, 100);
+
+            doc.save('personality_results.pdf');
+        }
+    </script>
+</body>
+</html>

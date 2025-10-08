@@ -1,0 +1,219 @@
+<section class="cta-section" id="take-test">
+  <style>
+    /* === CTA SECTION STYLES === */
+    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
+
+    .cta-section {
+      font-family: 'Poppins', sans-serif;
+      position: relative;
+      text-align: center;
+      padding: 120px 25px;
+      background: linear-gradient(135deg, #c5cae9, #e8eaf6);
+      overflow: hidden;
+      color: #1a237e;
+      isolation: isolate;
+    }
+
+    /* Animated gradient background */
+    .cta-section::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(120deg, #5c6bc0, #7986cb, #9fa8da);
+      opacity: 0.08;
+      animation: moveGradient 8s infinite alternate ease-in-out;
+      z-index: -1;
+    }
+
+    @keyframes moveGradient {
+      0% { transform: translateX(-10%) rotate(0deg); }
+      100% { transform: translateX(10%) rotate(2deg); }
+    }
+
+    /* Floating decorative shapes */
+    .floating-shape {
+      position: absolute;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      background: rgba(92, 107, 192, 0.15);
+      animation: float 6s infinite ease-in-out;
+      z-index: 0;
+    }
+
+    .floating-shape:nth-child(1) {
+      top: 10%;
+      left: 10%;
+      animation-delay: 0s;
+    }
+
+    .floating-shape:nth-child(2) {
+      bottom: 15%;
+      right: 12%;
+      animation-delay: 1.5s;
+      width: 140px;
+      height: 140px;
+    }
+
+    .floating-shape:nth-child(3) {
+      top: 50%;
+      left: 80%;
+      animation-delay: 3s;
+      width: 80px;
+      height: 80px;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    /* Content */
+    .cta-container {
+      max-width: 800px;
+      margin: 0 auto;
+      position: relative;
+      z-index: 1;
+      animation: fadeInUp 1s ease forwards;
+      opacity: 0;
+    }
+
+    .cta-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      animation: slideIn 1.2s ease forwards;
+    }
+
+    .cta-text {
+      font-size: 1.1rem;
+      line-height: 1.8;
+      color: #2e2e4e;
+      margin-bottom: 45px;
+      animation: fadeIn 1.5s ease forwards;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      background: #5c6bc0;
+      color: #fff;
+      padding: 16px 42px;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1.1rem;
+      letter-spacing: 0.5px;
+      transition: all 0.4s ease;
+      box-shadow: 0 10px 25px rgba(92, 107, 192, 0.4);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-btn::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: rgba(255,255,255,0.25);
+      transform: skewX(-30deg);
+      transition: left 0.4s;
+    }
+
+    .cta-btn:hover::before {
+      left: 100%;
+    }
+
+    .cta-btn:hover {
+      background: #3f51b5;
+      transform: translateY(-4px);
+      box-shadow: 0 15px 35px rgba(63, 81, 181, 0.5);
+    }
+
+    /* Animations */
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(-20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Button pulse animation */
+    .cta-btn {
+      animation: pulse 3s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .cta-title {
+        font-size: 1.9rem;
+      }
+
+      .cta-text {
+        font-size: 1rem;
+      }
+
+      .cta-btn {
+        padding: 14px 34px;
+        font-size: 1rem;
+      }
+    }
+  </style>
+
+  <!-- Floating shapes -->
+  <div class="floating-shape"></div>
+  <div class="floating-shape"></div>
+  <div class="floating-shape"></div>
+
+  <!-- Content -->
+  <div class="cta-container">
+    <h2 class="cta-title">Take Our Quick Personality Test</h2>
+    <p class="cta-text">
+      Discover what makes you unique. In just a few minutes, you’ll uncover insights about your
+      <strong>strengths</strong>, <strong>passions</strong>, and how you shine. It’s fun, simple,
+      and a great first step to understanding yourself better.
+      <br><br>
+      Ready to dive in? Let’s find your <em>Eounia</em> — your beautiful state of being!
+    </p>
+    <a href="./onboarding.html" class="cta-btn">Start the Test</a>
+  </div>
+
+  <script>
+    // === JS Animations ===
+    document.addEventListener("DOMContentLoaded", () => {
+      const ctaSection = document.querySelector(".cta-section");
+      const ctaButton = document.querySelector(".cta-btn");
+
+      // fade-in animation trigger
+      window.addEventListener("scroll", () => {
+        const rect = ctaSection.getBoundingClientRect();
+        if (rect.top < window.innerHeight - 150) {
+          ctaSection.classList.add("visible");
+        }
+      });
+
+      // smooth scroll
+      ctaButton.addEventListener("click", (e) => {
+        const target = document.querySelector(ctaButton.getAttribute("href"));
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: "smooth" });
+        }
+      });
+    });
+  </script>
+</section>
